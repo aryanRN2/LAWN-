@@ -67,6 +67,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Close mobile navbar on link click
+    const navLinks = document.querySelectorAll('.nav-link');
+    const menuToggle = document.getElementById('navbarNav');
+    const bsCollapse = new bootstrap.Collapse(menuToggle, {toggle:false});
+    
+    navLinks.forEach((l) => {
+        l.addEventListener('click', () => {
+            if (window.innerWidth < 992) {
+                bsCollapse.hide();
+            }
+        });
+    });
+
     // Simple Animation on Scroll
     const observerOptions = {
         threshold: 0.1

@@ -65,12 +65,65 @@ body {
 
 /* Hero Section */
 .hero-section {
-    height: 100vh;
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../img/hero.png');
+    min-height: 100vh;
+    padding: 120px 0 80px;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../img/hero.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     position: relative;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        background-attachment: scroll; /* Better for mobile performance */
+        padding: 150px 0 100px;
+    }
+    
+    .display-1 {
+        font-size: 2.8rem;
+    }
+    
+    .lead {
+        font-size: 1.1rem;
+    }
+}
+
+/* Mobile Navbar Fixes */
+@media (max-width: 991.98px) {
+    #mainNav {
+        background: rgba(8, 28, 21, 0.95) !important;
+        backdrop-filter: blur(15px);
+        padding: 15px 0;
+    }
+    
+    .navbar-collapse {
+        margin-top: 15px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-link.btn-primary {
+        margin-top: 15px;
+        text-align: center;
+    }
+}
+
+.navbar-toggler {
+    border: none;
+    padding: 0;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
 }
 
 .text-accent {
