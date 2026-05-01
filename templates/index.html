@@ -49,19 +49,20 @@
         <div class="hero-orb orb-2"></div>
         <div class="hero-orb orb-3"></div>
         
-        <div class="container text-center position-relative z-1">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <h1 class="display-1 fw-bold text-white mb-4">A Grand Venue for <br><span class="text-accent">Grand Moments.</span></h1>
-                    <p class="lead text-white-50 mb-5">Host your weddings, parties, and corporate events in our exquisitely manicured landscapes. Where luxury meets nature.</p>
-                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+        <div class="container position-relative z-1">
+            <div class="row justify-content-start justify-content-lg-center">
+                <div class="col-12 col-lg-8 text-start text-lg-center">
+                    <p class="text-accent fw-semibold mb-3 text-uppercase letter-spacing-2" style="font-size:0.85rem; letter-spacing:3px;">Welcome to Maurya's Lawn</p>
+                    <h1 class="fw-bold text-white mb-4" style="font-size: clamp(2rem, 7vw, 4.5rem); line-height:1.15;">A Grand Venue for<br><span class="text-accent">Grand Moments.</span></h1>
+                    <p class="text-white-50 mb-5" style="font-size: clamp(0.95rem, 2.5vw, 1.15rem); max-width: 520px; margin-left: 0; margin-right: auto;">Host your weddings, parties, and corporate events in our exquisitely manicured landscapes. Where luxury meets nature.</p>
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-start justify-content-lg-center">
                         <a href="#services" class="btn btn-primary btn-lg px-5 py-3">Explore Services</a>
                         <a href="{{ url_for('booking_calendar') }}" class="btn btn-outline-light btn-lg px-5 py-3">Book Now</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="scroll-down">
+        <div class="scroll-down d-none d-md-block">
             <i class="bi bi-chevron-down"></i>
         </div>
     </section>
