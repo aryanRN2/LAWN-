@@ -123,7 +123,16 @@ def logout():
 @login_required
 def admin_dashboard():
     bookings = Booking.query.order_by(Booking.created_at.desc()).all()
-    return render_template('admin.html', bookings=bookings)
+    
+    # Collect all unique booked dates for the calendar
+    booked_dates = []
+    for b in bookings:
+        if b.dates:
+            # Handle multiple dates per booking (comma-separated)
+            dates_list = [d.strip() for d in b.dates.split(',')]
+            booked_dates.extend(dates_list)
+    
+    return render_template('admin.html', bookings=bookings, booked_dates=booked_dates)
 
 @app.route('/admin/delete/<int:id>')
 @login_required
