@@ -8,20 +8,29 @@ app = Flask(__name__)
 app.secret_key = 'maurya_lawn_secret_key'
 
 # Database Configuration
-if os.environ.get('VERCEL'):
-    # On Vercel, use the writable /tmp directory
-    db_path = '/tmp/bookings_v3.db'
-    print(f"VERCEL DETECTED: Using database at {db_path}")
+if os.environ.get('DATABASE_URL'):
+    # Priority 1: DATABASE_URL (Common for Supabase/Render/Heroku)
+    # Fix for SQLAlchemy 1.4+ which requires 'postgresql://' instead of 'postgres://'
+    db_uri = os.environ.get('DATABASE_URL').replace("postgres://", "postgresql://", 1)
+    print("USING CLOUD DB: DATABASE_URL detected")
+elif os.environ.get('POSTGRES_URL'):
+    # Priority 2: POSTGRES_URL (Vercel Postgres)
+    db_uri = os.environ.get('POSTGRES_URL').replace("postgres://", "postgresql://", 1)
+    print("USING CLOUD DB: POSTGRES_URL detected")
+elif os.environ.get('VERCEL'):
+    # Fallback for Vercel if no DB is configured (Ephemeral)
+    db_uri = 'sqlite:////tmp/bookings_v3.db'
+    print("WARNING: Using ephemeral /tmp SQLite on Vercel. Bookings will be lost!")
 else:
-    # On local, use the project directory
+    # Local development
     basedir = os.path.abspath(os.path.dirname(__file__))
-    db_path = os.path.join(basedir, 'bookings_v3.db')
-    print(f"LOCAL DEV: Using database at {db_path}")
+    db_uri = f"sqlite:///{os.path.join(basedir, 'bookings_v3.db')}"
+    print(f"LOCAL DEV: Using SQLite at {db_uri}")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    "connect_args": {"check_same_thread": False},
+    "connect_args": {"sslmode": "require"} if "postgresql" in db_uri else {},
     "pool_pre_ping": True
 }
 
