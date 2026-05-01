@@ -43,15 +43,32 @@ class Booking(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Create database and seed admin user
+# Ensure database is initialized before requests
+@app.before_request
+def create_tables():
+    if os.environ.get('VERCEL'):
+        if not os.path.exists('/tmp/bookings.db'):
+            try:
+                db.create_all()
+                # Create default admin
+                if not User.query.filter_by(username='chandra221112').first():
+                    admin = User(username='chandra221112', password='pxs9rbf4au')
+                    db.session.add(admin)
+                    db.session.commit()
+            except Exception as e:
+                print(f"Error creating DB: {e}")
+    else:
+        # For local dev, create once on startup
+        pass
+
+# Local initialization
 with app.app_context():
-    db.create_all()
-    # Check if admin exists, if not create
-    admin_user = User.query.filter_by(username='chandra221112').first()
-    if not admin_user:
-        new_admin = User(username='chandra221112', password='pxs9rbf4au')
-        db.session.add(new_admin)
-        db.session.commit()
+    if not os.environ.get('VERCEL'):
+        db.create_all()
+        if not User.query.filter_by(username='chandra221112').first():
+            new_admin = User(username='chandra221112', password='pxs9rbf4au')
+            db.session.add(new_admin)
+            db.session.commit()
 
 @app.route('/')
 def home():
