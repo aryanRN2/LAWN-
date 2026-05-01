@@ -51,12 +51,14 @@ class Booking(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Ensure database is initialized before requests
+# Ensure database is initialized before requests on Vercel
 @app.before_request
 def create_tables():
     if os.environ.get('VERCEL'):
+        # On Vercel, the database must be in /tmp to be writable
         if not os.path.exists('/tmp/bookings_v3.db'):
             try:
+                # This only runs once per serverless instance
                 db.create_all()
                 # Create default admin
                 if not User.query.filter_by(username='chandra221112').first():
@@ -64,19 +66,24 @@ def create_tables():
                     db.session.add(admin)
                     db.session.commit()
             except Exception as e:
-                print(f"Error creating DB: {e}")
-    else:
-        # For local dev, create once on startup
-        pass
+                # Log error but don't crash the whole app if possible
+                app.logger.error(f"Error creating DB on Vercel: {e}")
 
-# Local initialization
-with app.app_context():
-    if not os.environ.get('VERCEL'):
-        db.create_all()
-        if not User.query.filter_by(username='chandra221112').first():
-            new_admin = User(username='chandra221112', password='pxs9rbf4au')
-            db.session.add(new_admin)
-            db.session.commit()
+# Initialization for local development
+def init_local_db():
+    with app.app_context():
+        try:
+            db.create_all()
+            if not User.query.filter_by(username='chandra221112').first():
+                new_admin = User(username='chandra221112', password='pxs9rbf4au')
+                db.session.add(new_admin)
+                db.session.commit()
+        except Exception as e:
+            print(f"Local DB init error: {e}")
+
+# Only run local init if not on Vercel
+if not os.environ.get('VERCEL'):
+    init_local_db()
 
 @app.route('/')
 def home():
