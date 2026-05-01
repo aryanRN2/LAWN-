@@ -64,19 +64,17 @@ def load_user(user_id):
 @app.before_request
 def create_tables():
     if os.environ.get('VERCEL'):
-        # On Vercel, the database must be in /tmp to be writable
-        if not os.path.exists('/tmp/bookings_v3.db'):
-            try:
-                # This only runs once per serverless instance
-                db.create_all()
-                # Create default admin
-                if not User.query.filter_by(username='chandra221112').first():
-                    admin = User(username='chandra221112', password='pxs9rbf4au')
-                    db.session.add(admin)
-                    db.session.commit()
-            except Exception as e:
-                # Log error but don't crash the whole app if possible
-                app.logger.error(f"Error creating DB on Vercel: {e}")
+        try:
+            # We use a simple check to see if we need to initialize
+            # This will create tables in Supabase if they don't exist
+            db.create_all()
+            # Create default admin if it doesn't exist
+            if not User.query.filter_by(username='chandra221112').first():
+                admin = User(username='chandra221112', password='pxs9rbf4au')
+                db.session.add(admin)
+                db.session.commit()
+        except Exception as e:
+            app.logger.error(f"DB Init error: {e}")
 
 # Initialization for local development
 def init_local_db():
