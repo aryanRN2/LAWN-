@@ -90,7 +90,24 @@ body {
     100% { transform: scale(1.05) translateX(2%)  translateY(1%); }
 }
 
-/* Floating Orbs */
+/* YouTube iframe overlay */
+.video-foreground {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+.video-foreground iframe {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 100vw;
+    height: 56.25vw; /* 16:9 ratio */
+    min-height: 100vh;
+    min-width: 177.77vh; /* 16:9 ratio */
+    transform: translate(-50%, -50%);
+    border: none;
+}
 .hero-orb {
     position: absolute;
     border-radius: 50%;
