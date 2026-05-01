@@ -9,13 +9,21 @@ app.secret_key = 'maurya_lawn_secret_key'
 
 # Database Configuration
 if os.environ.get('VERCEL'):
-    db_path = '/tmp/bookings_v2.db'
+    # On Vercel, use the writable /tmp directory
+    db_path = '/tmp/bookings_v3.db'
+    print(f"VERCEL DETECTED: Using database at {db_path}")
 else:
+    # On local, use the project directory
     basedir = os.path.abspath(os.path.dirname(__file__))
-    db_path = os.path.join(basedir, 'bookings_v2.db')
+    db_path = os.path.join(basedir, 'bookings_v3.db')
+    print(f"LOCAL DEV: Using database at {db_path}")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "connect_args": {"check_same_thread": False},
+    "pool_pre_ping": True
+}
 
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -47,7 +55,7 @@ def load_user(user_id):
 @app.before_request
 def create_tables():
     if os.environ.get('VERCEL'):
-        if not os.path.exists('/tmp/bookings.db'):
+        if not os.path.exists('/tmp/bookings_v3.db'):
             try:
                 db.create_all()
                 # Create default admin
