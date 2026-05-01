@@ -113,7 +113,6 @@ body {
     background-image: url('../img/hero.png');
     background-size: cover;
     background-position: center top;
-    animation: heroZoom 20s ease-in-out infinite alternate;
 }
 
 @media (max-width: 768px) {
@@ -143,10 +142,35 @@ body {
     }
 }
 
-@keyframes heroZoom {
-    0%   { transform: scale(1)    translateX(0)    translateY(0); }
-    50%  { transform: scale(1.06) translateX(-1%)  translateY(-1%); }
-    100% { transform: scale(1.04) translateX(1%)   translateY(1%); }
+/* Video Background Styling */
+.video-background {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -2;
+    overflow: hidden;
+}
+
+.video-foreground,
+.video-background iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+}
+
+@media (min-aspect-ratio: 16/9) {
+    .video-foreground { height: 300%; top: -100%; }
+}
+@media (max-aspect-ratio: 16/9) {
+    .video-foreground { width: 300%; left: -100%; }
+}
+
+/* Mobile specific scaling to hide YouTube UI */
+@media (max-width: 768px) {
+    .video-foreground {
+        width: 400%;
+        left: -150%;
+    }
 }
 
 /* Floating Orbs */
