@@ -8,3 +8,4 @@ ENV/
 .vercel/
 *.png
 !static/img/*.png
+*.db
