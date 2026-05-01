@@ -67,7 +67,7 @@ body {
 .hero-section {
     min-height: 100vh;
     padding: 120px 0 80px;
-    background: #000;
+    background: transparent;
     position: relative;
     display: flex;
     align-items: center;
