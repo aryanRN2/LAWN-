@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Dates | Maurya's Lawn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { background-color: #081c15; color: white; }
+        .calendar-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .flatpickr-calendar { background: #1b4332 !important; border: none !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calendar-container text-center">
+            <h2 class="fw-bold mb-4">Choose Your <span class="text-accent">Dates</span></h2>
+            <p class="text-white-50 mb-4">Select all the dates you'd like to book the venue for.</p>
+            
+            <form action="{{ url_for('booking_details') }}" method="POST">
+                <input type="text" id="datePicker" name="selected_dates" class="form-control bg-dark text-white border-secondary mb-4" placeholder="Click to select dates..." readonly required>
+                <button type="submit" class="btn btn-primary btn-lg w-100">Continue to Details</button>
+                <a href="/" class="btn btn-link text-white-50 mt-3 text-decoration-none">Back to Home</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr("#datePicker", {
+            mode: "multiple",
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            inline: true,
+            static: true,
+            theme: "dark"
+        });
+    </script>
+</body>
+</html>

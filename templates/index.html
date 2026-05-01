@@ -32,7 +32,7 @@
                     <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="https://maps.app.goo.gl/toyEYBa3ZWnbLpv77" target="_blank"><i class="bi bi-geo-alt me-1"></i> Location</a></li>
-                    <li class="nav-item"><a class="nav-link btn btn-primary ms-lg-3 px-4" href="#contact">Get Quote</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-primary ms-lg-3 px-4" href="{{ url_for('booking_calendar') }}">Get Quote</a></li>
                 </ul>
             </div>
         </div>
@@ -47,7 +47,7 @@
                     <p class="lead text-white-50 mb-5">Host your weddings, parties, and corporate events in our exquisitely manicured landscapes. Where luxury meets nature.</p>
                     <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
                         <a href="#services" class="btn btn-primary btn-lg px-5 py-3">Explore Services</a>
-                        <a href="#contact" class="btn btn-outline-light btn-lg px-5 py-3">Book Now</a>
+                        <a href="{{ url_for('booking_calendar') }}" class="btn btn-outline-light btn-lg px-5 py-3">Book Now</a>
                     </div>
                 </div>
             </div>
