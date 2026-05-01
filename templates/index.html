@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LushLawn | Premium Lawn Care & Landscaping</title>
+    <meta name="description" content="LushLawn provides professional lawn care, landscaping, and garden maintenance services to transform your outdoor space.">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span class="brand-text">Lush</span><span class="brand-sub">Lawn</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-primary ms-lg-3 px-4" href="#contact">Get Quote</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section d-flex align-items-center">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8" data-aos="fade-up">
+                    <h1 class="display-1 fw-bold text-white mb-4">Your Dream Lawn, <br><span class="text-accent">Our Passion.</span></h1>
+                    <p class="lead text-white-50 mb-5">Experience professional landscaping and lawn care that brings life to your outdoor sanctuary. Premium service, guaranteed results.</p>
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                        <a href="#services" class="btn btn-primary btn-lg px-5 py-3">Explore Services</a>
+                        <a href="#contact" class="btn btn-outline-light btn-lg px-5 py-3">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-down">
+            <i class="bi bi-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5 section-bg">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h6 class="text-primary text-uppercase fw-bold mb-3">Our Expertise</h6>
+                <h2 class="display-4 fw-bold">Mastering the Art of Green</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="service-card h-100">
+                        <div class="card-img-wrapper">
+                            <img src="{{ url_for('static', filename='img/mowing.png') }}" class="card-img-top" alt="Lawn Mowing">
+                        </div>
+                        <div class="card-body p-4 text-center">
+                            <div class="icon-circle mb-4">
+                                <i class="bi bi-scissors"></i>
+                            </div>
+                            <h4 class="card-title fw-bold">Precision Mowing</h4>
+                            <p class="card-text text-muted">Weekly maintenance with precision edges and clean-up for a golf-course finish.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card h-100">
+                        <div class="card-img-wrapper">
+                            <img src="{{ url_for('static', filename='img/garden.png') }}" class="card-img-top" alt="Garden Design">
+                        </div>
+                        <div class="card-body p-4 text-center">
+                            <div class="icon-circle mb-4">
+                                <i class="bi bi-flower1"></i>
+                            </div>
+                            <h4 class="card-title fw-bold">Landscape Design</h4>
+                            <p class="card-text text-muted">Bespoke garden layouts, flower bed installations, and seasonal rotations.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card h-100">
+                        <div class="card-img-wrapper">
+                            <img src="{{ url_for('static', filename='img/hero.png') }}" class="card-img-top" alt="Lawn Health">
+                        </div>
+                        <div class="card-body p-4 text-center">
+                            <div class="icon-circle mb-4">
+                                <i class="bi bi-droplet"></i>
+                            </div>
+                            <h4 class="card-title fw-bold">Organic Fertilization</h4>
+                            <p class="card-text text-muted">Science-backed soil nutrition and weed control to keep your lawn healthy year-round.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Section -->
+    <section id="interactive" class="py-5 bg-dark text-white overflow-hidden">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h2 class="display-5 fw-bold mb-4">Check Your <span class="text-primary">Lawn Score</span></h2>
+                    <p class="lead mb-4">Is your lawn reaching its full potential? Use our quick assessment tool to find out what it needs.</p>
+                    <div id="assessmentTool" class="glass-panel p-4">
+                        <div class="mb-3">
+                            <label class="form-label">How often do you water?</label>
+                            <select id="waterFreq" class="form-select bg-dark text-white border-secondary">
+                                <option value="0">Never</option>
+                                <option value="1">Once a week</option>
+                                <option value="2">2-3 times a week</option>
+                                <option value="3">Daily</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Current color?</label>
+                            <div class="d-flex gap-2">
+                                <div class="color-pick" data-score="1" style="background: #a5a58d;"></div>
+                                <div class="color-pick" data-score="2" style="background: #6b705c;"></div>
+                                <div class="color-pick active" data-score="3" style="background: #2d6a4f;"></div>
+                            </div>
+                        </div>
+                        <button id="calculateScore" class="btn btn-primary w-100">Get Recommendation</button>
+                        <div id="resultArea" class="mt-4 d-none">
+                            <div class="h3 fw-bold" id="scoreDisplay"></div>
+                            <p id="recommendationText"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="experience-badge text-center p-5">
+                        <div class="display-1 fw-bold">15+</div>
+                        <div class="h4">Years of Excellence</div>
+                        <hr class="w-25 mx-auto">
+                        <p>Serving thousands of happy homeowners across the country.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card border-0 shadow-lg overflow-hidden">
+                        <div class="row g-0">
+                            <div class="col-md-6 bg-primary p-5 text-white d-flex flex-column justify-content-center">
+                                <h2 class="fw-bold mb-4">Ready to Transform?</h2>
+                                <p class="mb-5">Schedule a free consultation today and let us show you what your lawn is capable of.</p>
+                                <ul class="list-unstyled">
+                                    <li class="mb-3"><i class="bi bi-geo-alt me-3"></i> 123 Garden Ave, Evergreen, CA</li>
+                                    <li class="mb-3"><i class="bi bi-telephone me-3"></i> +1 (555) 123-4567</li>
+                                    <li class="mb-3"><i class="bi bi-envelope me-3"></i> hello@lushlawn.com</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6 p-5 bg-white">
+                                <form>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control form-control-lg border-0 bg-light" placeholder="Your Name">
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="email" class="form-control form-control-lg border-0 bg-light" placeholder="Email Address">
+                                    </div>
+                                    <div class="mb-3">
+                                        <textarea class="form-control form-control-lg border-0 bg-light" rows="4" placeholder="Your Message"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg w-100">Send Request</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark text-white border-top border-secondary">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-4">
+                    <a class="navbar-brand mb-4 d-block" href="#">
+                        <span class="brand-text text-white">Lush</span><span class="brand-sub">Lawn</span>
+                    </a>
+                    <p class="text-secondary">Creating green masterpieces one blade at a time. Join the LushLawn family today.</p>
+                </div>
+                <div class="col-lg-2 ms-auto">
+                    <h5 class="fw-bold mb-4">Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h5 class="fw-bold mb-4">Follow Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="bi bi-twitter-x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-5 border-secondary">
+            <div class="text-center text-secondary small">
+                &copy; 2026 LushLawn Services. All rights reserved. Built with <i class="bi bi-heart-fill text-danger"></i> for Nature.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
