@@ -9,10 +9,10 @@ app.secret_key = 'maurya_lawn_secret_key'
 
 # Database Configuration
 if os.environ.get('VERCEL'):
-    db_path = '/tmp/bookings.db'
+    db_path = '/tmp/bookings_v2.db'
 else:
     basedir = os.path.abspath(os.path.dirname(__file__))
-    db_path = os.path.join(basedir, 'bookings.db')
+    db_path = os.path.join(basedir, 'bookings_v2.db')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
