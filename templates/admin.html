@@ -143,7 +143,10 @@
                 mode: "single",
                 dateFormat: "Y-m-d",
                 onDayCreate: function(dObj, dStr, fp, dayElem) {
-                    const dateStr = dayElem.dateObj.toISOString().split('T')[0];
+                    const dateObj = dayElem.dateObj;
+                    const dateStr = dateObj.getFullYear() + '-' + 
+                                    String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + 
+                                    String(dateObj.getDate()).padStart(2, '0');
                     if (approvedDates.includes(dateStr)) {
                         dayElem.classList.add("booked-day");
                     }
