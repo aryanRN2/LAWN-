@@ -71,37 +71,51 @@ body {
     position: relative;
     display: flex;
     align-items: center;
+    overflow: hidden;
 }
 
 .video-background {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%);
     z-index: -2;
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../img/hero.png');
     background-size: cover;
     background-position: center;
+    pointer-events: none;
 }
 
-.video-foreground,
-.video-background iframe {
+.video-background iframe,
+#ytPlayer {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%);
     pointer-events: none;
     border: none;
 }
 
-/* Maintain aspect ratio and cover */
+/* Maintain aspect ratio and cover for background video */
 @media (min-aspect-ratio: 16/9) {
-    .video-foreground { height: 300%; top: -100%; }
+    #ytPlayer { width: 100vw; height: 56.25vw; }
 }
 @media (max-aspect-ratio: 16/9) {
-    .video-foreground { width: 300%; left: -100%; }
+    #ytPlayer { width: 177.78vh; height: 100vh; }
+}
+
+/* Mobile specific scaling to hide YouTube UI */
+@media (max-width: 768px) {
+    #ytPlayer {
+        width: 300%;
+        height: 100%;
+        left: -100%;
+        transform: translate(0, -50%);
+    }
 }
 
 .video-overlay {
