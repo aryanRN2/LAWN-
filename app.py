@@ -1,37 +1,52 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'maurya_lawn_secret_key'
 
 # Database Configuration
-# Using /tmp for SQLite to make it somewhat compatible with Vercel's ephemeral filesystem
-# though a persistent DB like Vercel Postgres is recommended for production.
 basedir = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(basedir, 'bookings.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 # Models
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
     event_type = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    dates = db.Column(db.String(500), nullable=False)  # Stored as comma-separated strings
+    dates = db.Column(db.String(500), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __repr__(self):
-        return f'<Booking {self.name} - {self.event_type}>'
+# User Loader
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
-# Create database
+# Create database and seed admin user
 with app.app_context():
     db.create_all()
+    # Check if admin exists, if not create
+    admin_user = User.query.filter_by(username='chandra221112').first()
+    if not admin_user:
+        new_admin = User(username='chandra221112', password='pxs9rbf4au')
+        db.session.add(new_admin)
+        db.session.commit()
 
 @app.route('/')
 def home():
@@ -44,14 +59,12 @@ def booking_calendar():
 @app.route('/details', methods=['GET', 'POST'])
 def booking_details():
     if request.method == 'POST':
-        # Dates coming from calendar selection
         selected_dates = request.form.get('selected_dates')
         if not selected_dates:
             return redirect(url_for('booking_calendar'))
         session['selected_dates'] = selected_dates
         return render_template('details.html', dates=selected_dates)
     
-    # If GET, check if dates in session
     dates = session.get('selected_dates')
     if not dates:
         return redirect(url_for('booking_calendar'))
@@ -66,7 +79,8 @@ def confirm_booking():
     dates = session.get('selected_dates')
 
     if not all([name, phone, event_type, dates]):
-        return "Missing details", 400
+        flash("Please fill in all required fields.")
+        return redirect(url_for('booking_details'))
 
     new_booking = Booking(
         name=name,
@@ -77,15 +91,48 @@ def confirm_booking():
     )
     db.session.add(new_booking)
     db.session.commit()
-    
-    # Clear session
     session.pop('selected_dates', None)
-    
     return redirect(url_for('success'))
 
 @app.route('/success')
 def success():
     return render_template('success.html')
+
+# Admin Routes
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = User.query.filter_by(username=username).first()
+        
+        if user and user.password == password: # In production, use hashed passwords
+            login_user(user)
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash('Invalid username or password')
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    bookings = Booking.query.order_by(Booking.created_at.desc()).all()
+    return render_template('admin.html', bookings=bookings)
+
+@app.route('/admin/delete/<int:id>')
+@login_required
+def delete_booking(id):
+    booking = Booking.query.get_or_404(id)
+    db.session.delete(booking)
+    db.session.commit()
+    flash('Booking deleted successfully')
+    return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,40 +1,3 @@
-// YouTube Iframe API Player
-let player;
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('ytPlayer', {
-        videoId: 'mmijFkh_V8I',
-        playerVars: {
-            'autoplay': 1,
-            'controls': 0,
-            'rel': 0,
-            'showinfo': 0,
-            'modestbranding': 1,
-            'loop': 1,
-            'playlist': 'mmijFkh_V8I',
-            'mute': 1,
-            'start': 20,
-            'playsinline': 1,
-            'enablejsapi': 1
-        },
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
-}
-
-function onPlayerReady(event) {
-    event.target.mute();
-    event.target.playVideo();
-}
-
-function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.ENDED) {
-        player.seekTo(20);
-        player.playVideo();
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     // Navbar Scroll Effect
     const navbar = document.getElementById('mainNav');
@@ -45,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
             navbar.classList.remove('scrolled');
         }
     });
+
+
 
     // Smooth Scrolling for links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
