@@ -31,6 +31,7 @@ class Booking(db.Model):
     event_type = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=True)
     dates = db.Column(db.String(500), nullable=False)
+    status = db.Column(db.String(20), default='pending')  # New field: pending, approved
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # User Loader
@@ -87,7 +88,8 @@ def confirm_booking():
         phone=phone,
         event_type=event_type,
         description=description,
-        dates=dates
+        dates=dates,
+        status='pending'
     )
     db.session.add(new_booking)
     db.session.commit()
@@ -106,7 +108,7 @@ def login():
         password = request.form.get('password')
         user = User.query.filter_by(username=username).first()
         
-        if user and user.password == password: # In production, use hashed passwords
+        if user and user.password == password:
             login_user(user)
             return redirect(url_for('admin_dashboard'))
         else:
@@ -122,17 +124,37 @@ def logout():
 @app.route('/admin')
 @login_required
 def admin_dashboard():
-    bookings = Booking.query.order_by(Booking.created_at.desc()).all()
+    all_bookings = Booking.query.order_by(Booking.created_at.desc()).all()
     
-    # Collect all unique booked dates for the calendar
-    booked_dates = []
-    for b in bookings:
+    # Approved dates for the calendar
+    approved_dates_map = {} # date -> booking info
+    approved_dates_list = []
+    
+    for b in all_bookings:
         if b.dates:
-            # Handle multiple dates per booking (comma-separated)
             dates_list = [d.strip() for d in b.dates.split(',')]
-            booked_dates.extend(dates_list)
+            if b.status == 'approved':
+                approved_dates_list.extend(dates_list)
+                for d in dates_list:
+                    approved_dates_map[d] = {
+                        'name': b.name,
+                        'event': b.event_type,
+                        'phone': b.phone
+                    }
     
-    return render_template('admin.html', bookings=bookings, booked_dates=booked_dates)
+    return render_template('admin.html', 
+                           bookings=all_bookings, 
+                           approved_dates=approved_dates_list,
+                           booked_info=approved_dates_map)
+
+@app.route('/admin/approve/<int:id>')
+@login_required
+def approve_booking(id):
+    booking = Booking.query.get_or_404(id)
+    booking.status = 'approved'
+    db.session.commit()
+    flash(f'Booking for {booking.name} has been approved!')
+    return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/delete/<int:id>')
 @login_required
